@@ -1,0 +1,6 @@
+c:\users\marvin\documents\visual studio 2015\Projects\Schiffe Versenken\Schiffe Versenken\bin\Debug\Schiffe Versenken.exe.config
+c:\users\marvin\documents\visual studio 2015\Projects\Schiffe Versenken\Schiffe Versenken\bin\Debug\Schiffe Versenken.exe
+c:\users\marvin\documents\visual studio 2015\Projects\Schiffe Versenken\Schiffe Versenken\bin\Debug\Schiffe Versenken.pdb
+c:\users\marvin\documents\visual studio 2015\Projects\Schiffe Versenken\Schiffe Versenken\obj\Debug\Schiffe Versenken.csprojResolveAssemblyReference.cache
+c:\users\marvin\documents\visual studio 2015\Projects\Schiffe Versenken\Schiffe Versenken\obj\Debug\Schiffe Versenken.exe
+c:\users\marvin\documents\visual studio 2015\Projects\Schiffe Versenken\Schiffe Versenken\obj\Debug\Schiffe Versenken.pdb
