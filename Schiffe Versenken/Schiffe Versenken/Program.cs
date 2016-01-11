@@ -18,18 +18,24 @@ namespace Schiffe_versenken
         internal static int AnzKr = 2;
         internal static int AnzZer = 3;
         internal static int AnzUB = 4;
+        internal static bool ende = false;
         static void Main(string[] args)
         {
             Console.WriteLine("Willkommen bei Schiffe versenken - Console Edition");
-            Console.WriteLine("Wieviele Schiffe soll jeder zur Verfügung haben?");
             Console.WriteLine("Die KI positioniert ihre Schiffe");
             ErzeugeSpielfeld();
             KiPositionierung();
-            //Console.WriteLine("Positionieren sie ihre Schiffe: ");
+            Console.WriteLine("Positionieren Sie ihre Schiffe: ");
             //SpielerPositionierung();
-            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine("Nachdem nun beide Parteien ihre Schiffe platziert haben beginnt das eigentliche Spiel.");
+            Console.WriteLine("Im folgenden ist nun ein leeres Spielfeld zu sehen.");
+            Console.WriteLine("Dort werden Ihre Schüsse und Treffer angezeigt.\nDie Ansicht wechselt wenn der Computerspieler an der Reihe ist.");
+            Console.WriteLine("Dann sehen sie Ihren Plan mit Ihren platzierten Schiffen und den Schüssen\nund Treffern der KI.");
+            Console.WriteLine("Um das Spiel zu beenden schreiben sie einfach 'ende' in die Eingabe,\nwenn sie ihr Schussfenster sehen.");
+            Console.WriteLine();
             //KiSchuss();
-            //Console.ReadKey();
+            Console.ReadKey();
         }
         static void ErzeugeSpielfeld()
         {
@@ -43,7 +49,7 @@ namespace Schiffe_versenken
                 Spalte++;
                 for (int counter2 = 0; counter2 < 10;counter2++)
                 {
-                    felderSpieler[counter,counter2] = "0";
+                    felderSpieler[counter,counter2] = "00";
                     felderSpieler2[counter, counter2] = "00";
                     felderAi[counter, counter2] = "0";
                     Console.Write(felderSpieler[counter,counter2] + "|");
@@ -99,6 +105,7 @@ namespace Schiffe_versenken
                 KiUBootesetzen();
                 goto start;
             }
+            Console.WriteLine();
             Console.Write(" " + "|");
             for (int counter = 0; counter < 10; counter++) Console.Write(counter + "|");
             Console.WriteLine();
@@ -113,6 +120,7 @@ namespace Schiffe_versenken
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine();
         }
         static void KiSchlachtschiffesetzen()
         {
@@ -141,7 +149,7 @@ namespace Schiffe_versenken
                 }
                 if (kiRichtung == 1)
                 {
-                    if (kiSpalte > 6) goto start_positionierung_ki;
+                    if (kiSpalte > 5) goto start_positionierung_ki;
                     else
                     {
                         felderAi[kiZeile, kiSpalte] = "S";
@@ -519,7 +527,7 @@ namespace Schiffe_versenken
         }
         static void KiSchuss()
         {
-            Schuss:
+        Schuss:
             Random rnd = new Random();
             int kiSpalte;
             int kiZeile;
@@ -589,6 +597,21 @@ namespace Schiffe_versenken
         static void SpielerPositionierung()
         {
             start:
+            Console.Clear();
+            Console.Write(" " + "|");
+            for (int counter = 0; counter < 10; counter++) Console.Write(counter + "|");
+            Console.WriteLine();
+            char Spalte = 'A';
+            for (int counter = 0; counter < 10; counter++)
+            {
+                Console.Write(Spalte + "|");
+                Spalte++;
+                for (int counter2 = 0; counter2 < 10; counter2++)
+                {
+                    Console.Write(felderSpieler[counter, counter2] + "|");
+                }
+                Console.WriteLine();
+            }
             if (spielerSchlachtschiffe == 0)
             {
                 spielerSchlachtschiffe++;
@@ -598,7 +621,7 @@ namespace Schiffe_versenken
             if (spielerKreuzer != 2)
             {
                 spielerKreuzer++;
-                if (spielerKreuzer == 1) Console.WriteLine("Positionieren Sie als nächstes die Kreuzer. Die haben eine größe von jeweils 4 Feldern.");
+                if (spielerKreuzer == 1) Console.WriteLine("Positionieren Sie als nächstes die Kreuzer. Die haben eine größe von\njeweils 4 Feldern.");
                 if (spielerKreuzer == 2) Console.WriteLine("Geben Sie die Position für den zweiten Kreuzer an");
                 SpielerKreuzersetzen();
                 goto start;
@@ -606,7 +629,7 @@ namespace Schiffe_versenken
             if (spielerZerstörer != 3)
             {
                 spielerZerstörer++;
-                if (spielerZerstörer == 1) Console.WriteLine("Positionieren Sie als nächstes die Zerstörer. Die haben eine größe von jeweils 3 Feldern.");
+                if (spielerZerstörer == 1) Console.WriteLine("Positionieren Sie als nächstes die Zerstörer. Die haben eine größe von\njeweils 3 Feldern.");
                 if (spielerKreuzer == 2) Console.WriteLine("Geben Sie die Position für den zweiten Zerstörer an");
                 if (spielerKreuzer == 3) Console.WriteLine("Geben Sie die Position für den dritten Zerstörer an");
                 SpielerZerstörersetzen();
@@ -625,18 +648,39 @@ namespace Schiffe_versenken
         }
         static void SpielerSchlachtschiffesetzen()
         {
-        SpielerPositionierung:
+        start_positionierung_spieler:
             Console.WriteLine("Positionieren Sie zuerst das Schlachtschiff. Das hat eine größe von 5 Feldern.");
-            Console.Write("Geben sie die Spalte an: ");
+            Console.Write("Geben sie die Zeile an: ");
             string eingabe = Console.ReadLine();
             eingabe = eingabe.ToUpper();
             char ch = Convert.ToChar(eingabe);
-            int SpielerSpalte = ch - 'A';
-            Console.Write("Geben sie die Zeile an: ");
-            int SpielerZeile = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links.");
+            int SpielerZeile = ch - 'A';
+            Console.Write("Geben sie die Spalte an: ");
+            int SpielerSpalte = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links: ");
             int SpielerRichtung = Convert.ToInt32(Console.ReadLine());
-            if (felderAi[SpielerZeile, SpielerSpalte] == "0")
+            if (SpielerSpalte > 9)
+            {
+                Console.Clear();
+                Console.WriteLine("Die Spalte exisitiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerZeile > 'J')
+            {
+                Console.Clear();
+                Console.WriteLine("Die Zeile existiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerRichtung>3)
+            {
+                Console.Clear();
+                Console.WriteLine("Falsche Richtung!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (felderSpieler[SpielerZeile, SpielerSpalte] == "00")
             {
                 if (SpielerRichtung == 0)
                 {
@@ -644,15 +688,17 @@ namespace Schiffe_versenken
                     {
                         Console.WriteLine("Schlachtschiff kann hier nicht positioniert werden. Bitte erneut positionieren");
                         Console.Clear();
-                        goto SpielerPositionierung;
+                        goto start_positionierung_spieler;
                     }
                     else
                     {
-                        felderAi[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         for (int kigrößeSchlachtschiff = 0; kigrößeSchlachtschiff < 4; kigrößeSchlachtschiff++)
                         {
                             SpielerZeile--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         }
                     }
                 }
@@ -662,15 +708,17 @@ namespace Schiffe_versenken
                     {
                         Console.WriteLine("Schlachtschiff kann hier nicht positioniert werden. Bitte erneut positionieren");
                         Console.Clear();
-                        goto SpielerPositionierung;
+                        goto start_positionierung_spieler;
                     }
                     else
                     {
-                        felderAi[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         for (int kigrößeSchlachtschiff = 0; kigrößeSchlachtschiff < 4; kigrößeSchlachtschiff++)
                         {
                             SpielerSpalte++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         }
                     }
                 }
@@ -680,15 +728,17 @@ namespace Schiffe_versenken
                     {
                         Console.WriteLine("Schlachtschiff kann hier nicht positioniert werden. Bitte erneut positionieren");
                         Console.Clear();
-                        goto SpielerPositionierung;
+                        goto start_positionierung_spieler;
                     }
                     else
                     {
-                        felderAi[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         for (int kigrößeSchlachtschiff = 0; kigrößeSchlachtschiff < 4; kigrößeSchlachtschiff++)
                         {
                             SpielerZeile++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         }
                     }
                 }
@@ -698,15 +748,17 @@ namespace Schiffe_versenken
                     {
                         Console.WriteLine("Schlachtschiff kann hier nicht positioniert werden. Bitte erneut positionieren");
                         Console.Clear();
-                        goto SpielerPositionierung;
+                        goto start_positionierung_spieler;
                     }
                     else
                     {
-                        felderAi[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         for (int kigrößeSchlachtschiff = 0; kigrößeSchlachtschiff < 4; kigrößeSchlachtschiff++)
                         {
                             SpielerSpalte--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "S";
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "S";
                         }
                     }
                 }
@@ -714,17 +766,38 @@ namespace Schiffe_versenken
         }
         static void SpielerKreuzersetzen()
         { 
-        start_positionierung_spieler: 
-            Console.Write("Geben sie die Spalte an: ");
+        start_positionierung_spieler:
+            Console.Write("Geben sie die Zeile an: ");
             string eingabe = Console.ReadLine();
             eingabe = eingabe.ToUpper();
             char ch = Convert.ToChar(eingabe);
-            int SpielerSpalte = ch - 'A';
-            Console.Write("Geben sie die Zeile an: ");
-            int SpielerZeile = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links.");
+            int SpielerZeile = ch - 'A';
+            Console.Write("Geben sie die Spalte an: ");
+            int SpielerSpalte = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links: ");
             int SpielerRichtung = Convert.ToInt32(Console.ReadLine());
-            if (felderAi[SpielerZeile, SpielerSpalte] == "0")
+            if (SpielerSpalte > 9)
+            {
+                Console.Clear();
+                Console.WriteLine("Die Spalte exisitiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerZeile > 'J')
+            {
+                Console.Clear();
+                Console.WriteLine("Die Zeile existiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerRichtung > 3)
+            {
+                Console.Clear();
+                Console.WriteLine("Falsche Richtung!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (felderSpieler[SpielerZeile, SpielerSpalte] == "00")
             {
                 int stopp = 0;
                 if (SpielerRichtung == 0)
@@ -734,8 +807,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile--;
@@ -743,11 +816,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 4);
                         SpielerZeile = SpielerZeile + 4;
-                        felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         for (int kigrößeKreuzer = 0; kigrößeKreuzer < 3; kigrößeKreuzer++)
                         {
                             SpielerZeile--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         }
                     }
                 }
@@ -758,8 +833,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerSpalte++;
@@ -767,11 +842,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 4);
                         SpielerSpalte = SpielerSpalte - 4;
-                        felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         for (int kigrößeKreuzer = 0; kigrößeKreuzer < 3; kigrößeKreuzer++)
                         {
                             SpielerSpalte++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         }
                     }
                 }
@@ -782,8 +859,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile++;
@@ -791,11 +868,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 4);
                         SpielerZeile = SpielerZeile - 4;
-                        felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         for (int kigrößeKreuzer = 0; kigrößeKreuzer < 3; kigrößeKreuzer++)
                         {
                             SpielerZeile++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         }
                     }
                 }
@@ -806,8 +885,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerSpalte--;
@@ -815,11 +894,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 4);
                         SpielerSpalte = SpielerSpalte + 4;
-                        felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         for (int kigrößeKreuzer = 0; kigrößeKreuzer < 3; kigrößeKreuzer++)
                         {
                             SpielerSpalte--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "K" + spielerKreuzer;
                         }
                     }
                 }
@@ -829,16 +910,37 @@ namespace Schiffe_versenken
         static void SpielerZerstörersetzen()
         {
         start_positionierung_spieler:
-            Console.Write("Geben sie die Spalte an: ");
+            Console.Write("Geben sie die Zeile an: ");
             string eingabe = Console.ReadLine();
             eingabe = eingabe.ToUpper();
             char ch = Convert.ToChar(eingabe);
-            int SpielerSpalte = ch - 'A';
-            Console.Write("Geben sie die Zeile an: ");
-            int SpielerZeile = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links.");
+            int SpielerZeile = ch - 'A';
+            Console.Write("Geben sie die Spalte an: ");
+            int SpielerSpalte = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links: ");
             int SpielerRichtung = Convert.ToInt32(Console.ReadLine());
-            if (felderAi[SpielerZeile, SpielerSpalte] == "0")
+            if (SpielerSpalte > 9)
+            {
+                Console.Clear();
+                Console.WriteLine("Die Spalte exisitiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerZeile > 'J')
+            {
+                Console.Clear();
+                Console.WriteLine("Die Zeile existiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerRichtung > 3)
+            {
+                Console.Clear();
+                Console.WriteLine("Falsche Richtung!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (felderSpieler[SpielerZeile, SpielerSpalte] == "00")
             {
                 int stopp = 0;
                 if (SpielerRichtung == 0)
@@ -848,8 +950,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile--;
@@ -857,11 +959,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerZeile = SpielerZeile + 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerZeile--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
@@ -872,8 +976,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile++;
@@ -881,11 +985,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerZeile = SpielerSpalte - 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerSpalte++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
@@ -896,8 +1002,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile++;
@@ -905,11 +1011,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerZeile = SpielerZeile - 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerZeile++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
@@ -920,8 +1028,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerSpalte--;
@@ -929,11 +1037,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerSpalte = SpielerSpalte + 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerSpalte--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
@@ -943,16 +1053,37 @@ namespace Schiffe_versenken
         static void SpielerUBootesetzen()
         {
         start_positionierung_spieler:
-            Console.Write("Geben sie die Spalte an: ");
+            Console.Write("Geben sie die Zeile an: ");
             string eingabe = Console.ReadLine();
             eingabe = eingabe.ToUpper();
             char ch = Convert.ToChar(eingabe);
-            int SpielerSpalte = ch - 'A';
-            Console.Write("Geben sie die Zeile an: ");
-            int SpielerZeile = Convert.ToInt32(Console.ReadLine());
-            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links.");
+            int SpielerZeile = ch - 'A';
+            Console.Write("Geben sie die Spalte an: ");
+            int SpielerSpalte = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Geben Sie jetzt die Richtung an. Dabei steht 0 für Oben,\n1 für Rechts, 2 für Unten und 3 für links: ");
             int SpielerRichtung = Convert.ToInt32(Console.ReadLine());
-            if (felderAi[SpielerZeile, SpielerSpalte] == "0")
+            if (SpielerSpalte > 9)
+            {
+                Console.Clear();
+                Console.WriteLine("Die Spalte exisitiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerZeile > 'J')
+            {
+                Console.Clear();
+                Console.WriteLine("Die Zeile existiert nicht!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (SpielerRichtung > 3)
+            {
+                Console.Clear();
+                Console.WriteLine("Falsche Richtung!");
+                Spielfeld();
+                goto start_positionierung_spieler;
+            }
+            if (felderSpieler[SpielerZeile, SpielerSpalte] == "00")
             {
                 int stopp = 0;
                 if (SpielerRichtung == 0)
@@ -962,8 +1093,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile--;
@@ -971,11 +1102,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerZeile = SpielerZeile + 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerZeile--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
@@ -986,8 +1119,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile++;
@@ -995,11 +1128,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerZeile = SpielerSpalte - 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerSpalte++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
@@ -1010,8 +1145,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerZeile++;
@@ -1019,11 +1154,13 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerZeile = SpielerZeile - 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerZeile++;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
@@ -1034,8 +1171,8 @@ namespace Schiffe_versenken
                     {
                         do
                         {
-                            string line = felderAi[SpielerZeile, SpielerSpalte];
-                            if (line.Contains("0"))
+                            string line = felderSpieler2[SpielerZeile, SpielerSpalte];
+                            if (line.Contains("00"))
                             {
                                 stopp++;
                                 SpielerSpalte--;
@@ -1043,16 +1180,22 @@ namespace Schiffe_versenken
                             else goto start_positionierung_spieler;
                         } while (stopp != 3);
                         SpielerSpalte = SpielerSpalte + 3;
-                        felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                        felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         for (int kigrößeZerstörer = 0; kigrößeZerstörer < 2; kigrößeZerstörer++)
                         {
                             SpielerSpalte--;
-                            felderAi[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler2[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
+                            felderSpieler[SpielerZeile, SpielerSpalte] = "Z" + spielerZerstörer;
                         }
                     }
                 }
                 else goto start_positionierung_spieler;
             }
+        }
+        static void SpielerSchuss()
+        {
+
         }
     }
 }
